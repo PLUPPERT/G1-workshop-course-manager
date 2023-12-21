@@ -2,13 +2,12 @@ package se.lexicon.course_manager.data.dao;
 
 
 
+import se.lexicon.course_manager.data.sequencers.CourseSequencer;
 import se.lexicon.course_manager.model.Course;
 import se.lexicon.course_manager.model.Student;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.*;
 
 
 public class CourseCollectionRepository implements CourseDao{
@@ -22,10 +21,11 @@ public class CourseCollectionRepository implements CourseDao{
 
     @Override
     public Course createCourse(String courseName, LocalDate startDate, int weekDuration) {
-        Course course = new Course();
+        Course course = new Course(CourseSequencer.nextCourseId());
         course.setCourseName(courseName);
         course.setStartDate(startDate);
         course.setWeekDuration(weekDuration);
+        course.setStudents(new ArrayList<Student>(){});
         return courses.add(course) ? course : null;
     }
 
@@ -43,7 +43,7 @@ public class CourseCollectionRepository implements CourseDao{
 
     @Override
     public Collection<Course> findByNameContains(String name) {
-        Collection<Course> coursesFound = new ArrayList<>();
+        Collection<Course> coursesFound = new ArrayList<Course>(){};
         for (Course course : courses) {
             if (course.getCourseName().contains(name)) {
                 coursesFound.add(course);
@@ -54,7 +54,7 @@ public class CourseCollectionRepository implements CourseDao{
 
     @Override
     public Collection<Course> findByDateBefore(LocalDate end) {
-        Collection<Course> coursesFound = new ArrayList<>();
+        Collection<Course> coursesFound = new ArrayList<Course>(){};
         for (Course course : courses) {
             if (course.getStartDate().isBefore(end)) {
                 coursesFound.add(course);
@@ -65,7 +65,7 @@ public class CourseCollectionRepository implements CourseDao{
 
     @Override
     public Collection<Course> findByDateAfter(LocalDate start) {
-        Collection<Course> coursesFound = new ArrayList<>();
+        Collection<Course> coursesFound = new ArrayList<Course>(){};
         for (Course course : courses) {
             if (course.getStartDate().isAfter(start)) {
                 coursesFound.add(course);
@@ -76,12 +76,12 @@ public class CourseCollectionRepository implements CourseDao{
 
     @Override
     public Collection<Course> findAll() {
-        return this.courses;
+        return (this.courses == null) ? Collections.emptyList() : this.courses;
     }
 
     @Override
     public Collection<Course> findByStudentId(int studentId) {
-        Collection<Course> coursesFound = new ArrayList<>();
+        Collection<Course> coursesFound = new ArrayList<Course>(){};
         for (Course course : courses) {
             for (Student student : course.getStudents()) {
                 if (student.getId() == studentId) {

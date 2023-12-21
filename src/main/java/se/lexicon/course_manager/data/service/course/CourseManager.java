@@ -58,7 +58,7 @@ public class CourseManager implements CourseService {
 
     @Override
     public List<CourseView> searchByCourseName(String courseName) {
-        List<CourseView> courses = new ArrayList<>();
+        List<CourseView> courses = new ArrayList<CourseView>(){};
         for (CourseView courseView : converters.coursesToCourseViews(courseDao.findAll())) {
             if (courseView.getCourseName().contains(courseName)) {
                 courses.add(courseView);
@@ -70,7 +70,7 @@ public class CourseManager implements CourseService {
 
     @Override
     public List<CourseView> searchByDateBefore(LocalDate end) {
-        List<CourseView> courses = new ArrayList<>();
+        List<CourseView> courses = new ArrayList<CourseView>(){};
         for (CourseView view : converters.coursesToCourseViews(courseDao.findAll())) {
             if (view.getStartDate().isBefore(end)) {
                 courses.add(view);
@@ -81,7 +81,7 @@ public class CourseManager implements CourseService {
 
     @Override
     public List<CourseView> searchByDateAfter(LocalDate start) {
-        List<CourseView> courses = new ArrayList<>();
+        List<CourseView> courses = new ArrayList<CourseView>(){};
         for (CourseView view : converters.coursesToCourseViews(courseDao.findAll())) {
             if(view.getStartDate().isAfter(start)) {
                 courses.add(view);
@@ -113,7 +113,7 @@ public class CourseManager implements CourseService {
                 return true;
             }
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -128,12 +128,12 @@ public class CourseManager implements CourseService {
 
     @Override
     public List<CourseView> findAll() {
-        return converters.coursesToCourseViews(courseDao.findAll());
+        return (courseDao.findAll() == null) ? new ArrayList<CourseView>(){} : converters.coursesToCourseViews(courseDao.findAll());
     }
 
     @Override
     public List<CourseView> findByStudentId(int studentId) {
-        List<CourseView> courses = new ArrayList<>();
+        List<CourseView> courses = new ArrayList<CourseView>(){};
 
         for (CourseView courseView : converters.coursesToCourseViews(courseDao.findAll())) {
             for(StudentView student : converters.studentsToStudentViews(studentDao.findAll())){

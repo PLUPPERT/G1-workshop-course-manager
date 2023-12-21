@@ -5,6 +5,7 @@ import se.lexicon.course_manager.data.sequencers.CourseSequencer;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 
 public class Course implements Serializable {
@@ -15,10 +16,11 @@ public class Course implements Serializable {
     private Collection<Student> students;
 
     public Course() {
+        this.id = CourseSequencer.getCourseSequencer();
     }
 
     public Course(int id) {
-        this.id = CourseSequencer.getCourseSequencer();
+        this.id = id;
     }
 
 
@@ -54,7 +56,7 @@ public class Course implements Serializable {
     }
 
     public void setStudents(Collection<Student> students) {
-        this.students = students;
+        this.students = (students == null) ? Collections.emptyList() : students;
     }
 
     public boolean enrollStudent(Student student){

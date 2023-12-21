@@ -15,16 +15,22 @@ import java.util.List;
 public class ModelToDto implements Converters {
     @Override
     public StudentView studentToStudentView(Student student) {
+        if (student == null) {
+            throw new IllegalArgumentException("Parameter can't be null");
+        }
         return new StudentView(student.getId(), student.getName(), student.getEmail(), student.getAddress());
     }
 
     @Override
     public CourseView courseToCourseView(Course course) {
+        if (course == null) {
+            throw new IllegalArgumentException("Parameter can't be null");
+        }
         return new CourseView(course.getId(), course.getCourseName(), course.getStartDate(), course.getWeekDuration(), studentsToStudentViews(course.getStudents()));
     }
     @Override
     public List<CourseView> coursesToCourseViews(Collection<Course> courses) {
-        List<CourseView> newCourses = new ArrayList<>();
+        List<CourseView> newCourses = new ArrayList<CourseView>(){};
         for (Course course : courses) {
             newCourses.add(courseToCourseView(course));
         }
@@ -33,7 +39,7 @@ public class ModelToDto implements Converters {
 
     @Override
     public List<StudentView> studentsToStudentViews(Collection<Student> students) {
-        List<StudentView> newStudents = new ArrayList<>();
+        List<StudentView> newStudents = new ArrayList<StudentView>(){};
         for (Student student : students) {
             newStudents.add(studentToStudentView(student));
         }
